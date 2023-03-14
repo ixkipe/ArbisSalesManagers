@@ -1,0 +1,39 @@
+@{
+  ViewData["Title"] = "Менеджеры";
+}
+
+@* <section class="hero is-link">
+  <div class="hero-body">
+    <p class="title">HEY! &#9996;</p>
+    <p class="subtitle">Welcome to this webpage. It is still under construction.</p>
+  </div>
+</section> *@
+
+<div class="container" id="mainContent"></div>
+
+<div class="modal" id="instructionsModal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Добавляем менеджера</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <div class="content">
+        <h1 class="is-size-1">Lololol.</h1>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque enim ex ducimus nobis? Impedit aperiam, esse excepturi alias est corrupti magni rerum obcaecati et officia consequuntur cum sed ea hic debitis laudantium unde, omnis, quo mollitia eligendi culpa molestiae fugiat.</p>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+
+    </footer>
+
+    <div id="snackbar" class="notification is-danger"></div>
+  </div>
+</div>
+
+@section Scripts {
+  <script type="module" src="~/js/home.js"></script>
+  <script type="module" src="~/js/elements.js"></script>
+  <script type="module" src="~/js/toast.js"></script>
+}

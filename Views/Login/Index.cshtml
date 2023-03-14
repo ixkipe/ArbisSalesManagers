@@ -1,0 +1,51 @@
+@model ArbisSalesManagers.Models.CredentialDTO
+@{
+  ViewData["Title"] = "Авторизация";
+}
+
+<div class="columns is-centered">
+  <div class="column is-8">
+    <div class="container">
+      <form asp-action="Index" asp-controller="Login" method="post">
+        <div class="help is-danger" asp-validation-summary="ModelOnly" id="model-validation"></div>
+        <div class="field">
+          <label class="label" asp-for="@Model.Username"></label>
+          <div class="control has-icons-left">
+            <input type="text" class="input" asp-for="@Model.Username" id="username-field">
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+          </div>
+          <span class="help is-danger" asp-validation-for="@Model.Username" id="username-validation"></span>
+        </div>
+
+        <div class="field">
+          <label asp-for="@Model.Password" class="label"></label>
+          <div class="control has-icons-left">
+            <input type="password" id="password-field" class="input" asp-for="@Model.Password">
+            <span class="icon is-small is-left">
+              <i class="fas fa-key"></i>
+            </span>
+          </div>
+          <span class="help is-danger" asp-validation-for="@Model.Password" id="password-validation"></span>
+
+          <div class="field is-grouped is-grouped-centered mt-4">
+            <div class="control">
+              <button class="button is-link is-rounded" type="submit" id="submit-button" disabled>
+                <span class="icon is-small">
+                  <i class="fas fa-sign-in"></i>
+                </span>
+                <span>Авторизоваться</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts {
+  <script type="text/javascript" src="~/js/loginPage.js"></script>
+}

@@ -1,0 +1,65 @@
+@inject IHttpContextAccessor hcAccessor
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="~/css/bulma.min.css">
+  <link rel="stylesheet" href="~/css/bulma-switch-2.0.4/dist/css/bulma-switch.min.css">
+  <link rel="stylesheet" href="~/css/w3snackbar.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="~/css/fontawesome-free-6.3.0-web/css/all.min.css">
+  <link rel="shortcut icon" href='@Url.Content($"~/content/{ViewData["Icon"] ?? "favicon.ico"}")' type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <title>@ViewData["Title"]</title>
+</head>
+<body style="font-family: 'Roboto', sans-serif;">
+  @* sticky header goes here *@
+  @* two pages: authentication and manager list, so technically this is not an SPA =) *@
+  @* auto-redirect to sign-in page when trying to access managers' page unless authenticated, and vice versa *@
+
+  <nav class="navbar is-light">
+    <div class="navbar-brand">
+      <a href='@Url.Action(action: "Index", controller: "Home")' class="px-3">
+        <img src="~/site_logo.png" width="112" height="112"> <span class="is-size-5 mx-3">Звонки</span>
+      </a>
+
+      @if (hcAccessor.HttpContext.User.Identity.IsAuthenticated) {
+        <a role="button" class="navbar-burger" data-target="navbarBasicExample" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      }
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            @if (hcAccessor.HttpContext.User.Identity.IsAuthenticated) {
+              <button class="button is-info is-light js-modal-trigger" id="instructions" data-target="instructionsModal">&#129300; А как добавлять?</button>
+              <a class="button is-danger is-outlined" href='@Url.Action(action: "Index", controller: "Logout")'>
+                <span class="icon is-small">
+                  <i class="fas fa-sign-out"></i>
+                </span>
+                <span>Выйти</span>
+              </a>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    @RenderBody()
+  </section>
+
+  @RenderSection("Scripts", required: false)
+  <script src="~/js/header.js"></script>
+</body>
+</html>
