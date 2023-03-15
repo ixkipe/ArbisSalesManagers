@@ -1,4 +1,5 @@
 import elements from "./elements.js";
+import apiMethods from "./api.js";
 
 const allManagersUrl = '/api/Managers?active=false';
 let managersHttpResponse;
@@ -61,6 +62,10 @@ function closeAllModals() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  document.querySelector('#testRest').onclick = () => {
+    const result = apiMethods.testRestApi();
+    console.log(result);
+  };
 
   // Add a click event on buttons to open a specific modal
   (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {

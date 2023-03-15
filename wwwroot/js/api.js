@@ -1,3 +1,5 @@
+// remake everything using Fetch API
+
 /**
  * 
  * @param {{id: string, username: string, num: string}} manager 
@@ -63,4 +65,4 @@ function setInactive(id) {
   }
 }
 
-export default { setActive, setInactive, setManagerNum }
+export default { setActive, setInactive, setManagerNum, testRestApi }

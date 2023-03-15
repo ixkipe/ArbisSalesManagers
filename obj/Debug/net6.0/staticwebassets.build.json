@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "DmCuFv5okk0EW0GCklqUiV8ZTD6GWny70/lgpZTQEqQ=",
+  "Hash": "sTEydHgCNNRrM/LF/Ojgp+ZuhgO3P/WcOw9VnqCa280=",
   "Source": "ArbisSalesManagers",
   "BasePath": "_content/ArbisSalesManagers",
   "Mode": "Default",
@@ -36514,6 +36514,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\fontawesome-free-6.3.0-web\\webfonts\\fa-v4compatibility.woff2"
+    },
+    {
+      "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\api.js",
+      "SourceId": "ArbisSalesManagers",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\",
+      "BasePath": "_content/ArbisSalesManagers",
+      "RelativePath": "js/api.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\api.js"
     },
     {
       "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\elements.js",
