@@ -1,4 +1,4 @@
-function managerBlock(id, name, num, isActive) {
+function managerBlock(id, name, num, isActive, hasNumber) {
   let columnsContainer = document.createElement('div');
   columnsContainer.className = 'box block';
 
@@ -8,7 +8,7 @@ function managerBlock(id, name, num, isActive) {
 
   columns.appendChild(nameColumn(name));
   columns.appendChild(numColumn(num, id));
-  columns.appendChild(switchComponent(isActive, id));
+  columns.appendChild(switchComponent(isActive, id, hasNumber));
 
   return columnsContainer;
 }
@@ -50,7 +50,6 @@ function numColumn(num, id) {
   }
   
   numColumn.appendChild(numComponentIfNumberExists(num, id));
-
   return numColumn;
 }
 
@@ -97,7 +96,7 @@ function halfColumn() {
   return column;
 }
 
-function switchComponent(isActive, id) {
+function switchComponent(isActive, id, hasNumber) {
   let switchColumn = document.createElement('div');
   switchColumn.className = 'column is-2';
 
@@ -111,6 +110,9 @@ function switchComponent(isActive, id) {
   bulmaSwitch.name = bulmaSwitch.id;
   if (isActive) {
     bulmaSwitch.setAttribute('checked', 'checked');
+  }
+  if (!hasNumber) {
+    bulmaSwitch.setAttribute('disabled', true);
   }
 
   let bulmaSwitchLabel = labelElement('Активен?');
@@ -145,16 +147,22 @@ function loadingIcon() {
 function numChangeButton(id) {
   let button = document.createElement('button');
   button.className = 'button is-small is-light is-warning';
-  button.innerText = 'Изменить';
+  button.innerText = 'Изменить'; 
   button.id = 'btn-' + id;
   button.onclick = () => {
     document.getElementById('inp-' + id).removeAttribute('disabled');
-    document.getElementById(button.id).replaceWith(numSubmitButton(id));
+    document.getElementById(button.id).replaceWith(numSubmitButton(id, false));
   }
   return button;
 }
 
-function numSubmitButton(id) {
+/**
+ * 
+ * @param {string} id 
+ * @param {boolean} createNew 
+ * @returns 
+ */
+function numSubmitButton(id, createNew) {
   let button = document.createElement('button');
   button.className = 'button is-small is-primary';
   button.innerText = 'Отправить';
@@ -162,6 +170,8 @@ function numSubmitButton(id) {
   button.onclick = () => {
     document.getElementById('inp-' + id).setAttribute('disabled', 'true');
     button.classList.add('is-loading');
+
+    // if (createNew) - insert new manager in inactive table; otherwise just modify the existing one
     setTimeout(() => {
       document.getElementById(button.id).replaceWith(numChangeButton(id));
     }, 1000);
@@ -185,4 +195,4 @@ function retrieveId(id) {
   return id.substring(4);
 }
 
-export default { loadingIcon, switchComponent, halfColumn, numComponentIfNumberExists, numColumn, nameColumn, labelElement, managerBlock }
+export default { loadingIcon, managerBlock }

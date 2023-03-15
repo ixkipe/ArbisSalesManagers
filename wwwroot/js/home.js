@@ -1,5 +1,4 @@
 import elements from "./elements.js";
-import ShowToast from "./toast.js";
 
 const allManagersUrl = '/api/Managers?active=false';
 let managersHttpResponse;
@@ -21,15 +20,16 @@ function displayManagerList() {
   const mainContent = document.getElementById('mainContent');
 
   active.forEach(manager => {
-    mainContent.appendChild(elements.managerBlock(manager.id, manager.username, manager.num, true));
+    mainContent.appendChild(elements.managerBlock(manager.id, manager.username, manager.num, true, true));
   });
 
   inactive.forEach(manager => {
-    mainContent.appendChild(elements.managerBlock(manager.id, manager.username, manager.num, true));
+    mainContent.appendChild(elements.managerBlock(manager.id, manager.username, manager.num, false, true));
   });
+  console.log(inactive.length);
 
   unassigned.forEach(manager => {
-    mainContent.appendChild(elements.managerBlock(manager.id, manager.username, manager.num, false))
+    mainContent.appendChild(elements.managerBlock(manager.id, manager.username, manager.num, false, false))
   });
 }
 
@@ -61,8 +61,6 @@ function closeAllModals() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-
-  // Functions to open and close a modal
 
   // Add a click event on buttons to open a specific modal
   (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {

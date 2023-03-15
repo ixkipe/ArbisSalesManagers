@@ -70,10 +70,10 @@ public class ManagersController : ControllerBase {
   // 3. move manager from inactive to active
   // 4. edit phone number of a certain manager
 
-  [HttpPost]
-  public async Task<IActionResult> AssignPhoneNum([FromBody] User user) {
+  [HttpPost("{inactive:bool}")]
+  public async Task<IActionResult> AssignPhoneNum([FromBody] User user, bool inactive = false) {
     await this._provider.Connection.ExecuteAsync(
-      Queries.CreateManager,
+      inactive ? Queries.CreateManagerInInactive : Queries.CreateManager,
       new {
         id = user.Id,
         username = user.Username,
@@ -87,14 +87,50 @@ public class ManagersController : ControllerBase {
   }
 
   [HttpGet("enable/{id}")]
-  public async Task<IActionResult> SetActive(string id) => throw new NotImplementedException();
+  public async Task<IActionResult> SetActive(string id) {
+    var result = await this._provider.Connection.ExecuteAsync(
+      Queries.MoveManagerToActive,
+      new { id = id }
+    );
+
+    result += await this._provider.Connection.ExecuteAsync(
+      Queries.RemoveManagerFromInactive,
+      new { id = id }
+    );
+
+    return result > 1 ? Ok($"{id} set active ok") : BadRequest("Something went wrong.");
+  }
 
   [HttpGet("disable/{id}")]
-  public async Task<IActionResult> SetInactive(string id) => throw new NotImplementedException();
+  public async Task<IActionResult> SetInactive(string id) {
+    var result = await this._provider.Connection.ExecuteAsync(
+      Queries.MoveManagerToInactive,
+      new { id = id }
+    );
 
+    result += await this._provider.Connection.ExecuteAsync(
+      Queries.RemoveManager,
+      new { id = id }
+    );
+
+    return result > 1 ? Ok($"{id} set inactive ok") : BadRequest("Something went wrong.");
+  }
+  
   [HttpPut]
-  public async Task<IActionResult> EditNumber([FromBody] User user) => throw new NotImplementedException();
+  public async Task<IActionResult> EditNumber([FromBody] User user) {
+    var result = await this._provider.Connection.ExecuteAsync(
+      Queries.UpdateManagerNumber,
+      new {
+        num = user.Num,
+        id = user.Id
+      }
+    );
 
+    return result > 0 ? Ok($"{user.Id} number changed to {user.Num}") : BadRequest("Something went wrong.");
+  }
+
+  // no REST methods beyond this point
+  #region notRest
   private async Task<IEnumerable<User>> AmoManagerList() {
     IEnumerable<User> managers = Enumerable.Empty<User>();
 
@@ -122,55 +158,5 @@ public class ManagersController : ControllerBase {
 
     return managers;
   }
-
-  // !!!
-  // what follows applies to test data and is to be deleted in the final version
-
-  // [HttpGet("test/all")]
-  // [AllowAnonymous]
-  // public async Task<IActionResult> GetAllManagersTest(bool inactive = false) {
-  //   var managersFromDb = JsonConvert.DeserializeObject<IEnumerable<User>>(System.IO.File.ReadAllText(MetaData.ActiveManagers));
-  //   if (!inactive) return Ok(managersFromDb);
-
-  //   var inactiveManagers = JsonConvert.DeserializeObject<IEnumerable<User>>(System.IO.File.ReadAllText(MetaData.InactiveManagers));
-  //   var amoManagers = JsonConvert.DeserializeObject<IEnumerable<AmoCrmUser>>(System.IO.File.ReadAllText(MetaData.ManagersFromAmoCrm))
-  //                             .Select(x => _mapper.Map<User>(x)).Except(managersFromDb.Concat(inactiveManagers), new UserEqualityComparer());
-
-  //   return Ok(new {
-  //     count = new { active = managersFromDb.Count(), inactive = inactiveManagers.Count(), unassigned = amoManagers.Count() }, 
-  //     active = managersFromDb, 
-  //     inactive = inactiveManagers, 
-  //     unassigned = amoManagers
-  //   });
-  // }
-
-  // [HttpGet("test/amomanagers")]
-  // [AllowAnonymous]
-  // public async Task<IActionResult> GetAmoManagers() {
-  //   using var client = new RestClient(new RestClientOptions() {
-  //     ThrowOnAnyError = false,
-  //     BaseUrl = new Uri(this._configuration.GetSection("AppConfig").GetSection("AmoCrmBaseUrl").Value)
-  //   });
-    
-  //   // GET JWT FROM DATABASE
-  //   client.Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken);
-  //   var request = new RestRequest(Requests.GetAllManagers);
-
-  //   var response = await client.ExecuteGetAsync(request);
-  //   Log.Information(response.StatusCode.ToString());
-  //   if (response.StatusCode != System.Net.HttpStatusCode.OK) {
-  //     Log.Error("Access token is either invalid or has expired. Refreshing...");
-  //     this._jwtHandler.Refresh();
-  //     client.Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken);
-  //     response = await client.ExecuteGetAsync(request);
-
-  //     if (response.StatusCode != System.Net.HttpStatusCode.OK) throw new HttpRequestException($"Either the refresh token has expired or something else has gone wrong: {response.ErrorMessage}");
-  //   };
-
-  //   // we split the managers into three groups, just like in the method above: active, inactive, unassigned
-
-  //   var managers = JsonConvert.DeserializeObject<ListResult>(response.Content)._embedded.Users.Select(u => _mapper.Map<User>(u));
-
-  //   return Ok(new { count = managers.Count(), managers = managers });
-  // }
+  #endregion notRest
 }

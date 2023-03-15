@@ -3,13 +3,15 @@ namespace ArbisSalesManagers.DataAccess;
 public class Queries {
   public const string GetAllManagers = $"select * from {MetaData.ManagersTable}";
   public const string GetManagerUnderId = $"select * from {MetaData.ManagersTable} where id = @id";
+  public const string GetInactiveManagerUnderId = $"select * from {MetaData.ManagersTable} where id = @id";
   public const string CreateManager = $"insert into {MetaData.ManagersTable} values (@id, @username, @num)";
+  public const string CreateManagerInInactive = $"insert into {MetaData.InactiveManagersTable} values (@id, @username, @num)";
   public const string RemoveManager = $"delete from {MetaData.ManagersTable} where id = @id";
   public const string GetAllInactiveManagers = $"select * from {MetaData.InactiveManagersTable}";
-  public const string GetActiveManagersUnderIds = $"select * from {MetaData.ManagersTable} where id in (@ids)";
-  public const string GetInactiveManagersUnderIds = $"select * from {MetaData.InactiveManagersTable} where id in (@ids)";
-  public const string MoveManagerToInactive = $"insert into {MetaData.InactiveManagersTable} values (@id, @username, @num)";
+  public const string MoveManagerToInactive = $"insert into {MetaData.InactiveManagersTable} select * from {MetaData.ManagersTable} where id = @id";
+  public const string MoveManagerToActive = $"insert into {MetaData.ManagersTable} select * from {MetaData.InactiveManagersTable} where id = @id";
   public const string RemoveManagerFromInactive = $"delete from {MetaData.InactiveManagersTable} where id = @id";
+  public const string UpdateManagerNumber = $"update {MetaData.ManagersTable} set num = @num where id = @id";
 
   // what follows applies to authentication
   public const string FetchCreds = $"select * from {MetaData.ApplicationCreds} where username = 'admin'";

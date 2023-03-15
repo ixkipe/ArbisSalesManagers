@@ -29,7 +29,7 @@ public class JwtHandler : IJwtHandler {
       client_secret = this._config.GetSection("AppConfig").GetSection("ClientSecret").Value,
       grant_type = "refresh_token",
       refresh_token = refreshToken,
-      redirect_uri = "https://ya.ru"
+      redirect_uri = this._config.GetSection("AppConfig").GetSection("RedirectUri").Value,
     });
 
     var response = client.Post(request);
