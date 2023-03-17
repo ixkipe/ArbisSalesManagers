@@ -1,4 +1,7 @@
 @inject IHttpContextAccessor hcAccessor
+@{
+  bool loggedIn = hcAccessor.HttpContext.User.Identity.IsAuthenticated;
+}
 
 <!DOCTYPE html>
 
@@ -26,7 +29,7 @@
         <img src="~/site_logo.png" width="112" height="112"> <span class="is-size-5 mx-3">Звонки</span>
       </a>
 
-      @if (hcAccessor.HttpContext.User.Identity.IsAuthenticated) {
+      @if (loggedIn) {
         <a role="button" class="navbar-burger" data-target="navbarBasicExample" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -39,8 +42,8 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <button class="button is-warning is-light" id="testRest">Test</button>
-            @if (hcAccessor.HttpContext.User.Identity.IsAuthenticated) {
+            <button class="button is-warning is-light" id="testRest">Test</button> @* delete this button from final version *@
+            @if (loggedIn) {
               <button class="button is-info is-light js-modal-trigger" id="instructions" data-target="instructionsModal">&#129300; А как добавлять?</button>
               <a class="button is-danger is-outlined" href='@Url.Action(action: "Index", controller: "Logout")'>
                 <span class="icon is-small">

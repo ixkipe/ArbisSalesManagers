@@ -25,6 +25,10 @@ public class ManagersController : ControllerBase {
     _jwtHandler = jwtHandler;
   }
 
+  // delete this from final version
+  [HttpGet("test")]
+  public async Task<IActionResult> TestMethod() => Ok(new { result = Random.Shared.Next(1000) });
+
   [HttpGet]
   public async Task<IActionResult> GetAllManagers() {
     var managers = (await AmoManagerList()).Where(x => x.is_active);

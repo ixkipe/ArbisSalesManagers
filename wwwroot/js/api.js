@@ -1,68 +1,66 @@
-// remake everything using Fetch API
-
 /**
  * 
  * @param {{id: string, username: string, num: string}} manager 
  * @param {boolean} alreadyExists 
  */
-function setManagerNum(manager, alreadyExists) {
-  let xhr = new XMLHttpRequest();
+async function setManagerNum(manager, alreadyExists) {
+  let xhr;
   if (alreadyExists) {
-    xhr.open('PUT', '/api/Managers', false);
+    xhr = await fetch(
+      '/api/Managers/false',
+      {
+        method: 'PUT',
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(manager)
+      }
+    );
   }
   else {
-    xhr.open('POST', '/api/Managers/true', false);
+    xhr = await fetch(
+      '/api/Managers/true',
+      {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(manager)
+      }
+    );
   }
-
-  try {
-    xhr.send(manager);
-
-    if (xhr.status != 200) {
-      return { status: xhr.status, message: "Что-то пошло не так. Не удалось изменить номер.", details: xhr.statusText }
-    }
-
-    return { status: xhr.status, message: "Номер успешно изменён.", details: xhr.statusText }
-  }
-  catch (e) {
-    console.error(e);
-    return { message: "Ошибка." };
-  }
+  
+  return xhr.json();
 }
 
 /**
  * 
  * @param {string} id 
  */
-function setActive(id) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/api/Managers/enable/' + id, false);
-
-  try {
-    xhr.send();
-    return { status: xhr.status, message: xhr.statusText };
-  }
-  catch (e) {
-    console.log(e);
-    return { message: "Ошибка." };
-  }
+async function setActive(id) {
+  const xhr = await fetch(
+    '/api/Managers/enable/' + id, { method: 'GET' }
+  );
+  return xhr.json();
 }
 
 /**
  * 
  * @param {string} id 
  */
-function setInactive(id) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/api/Managers/disable/' + id, false);
-
-  try {
-    xhr.send();
-    return { status: xhr.status, message: xhr.statusText };
-  }
-  catch (e) {
-    console.log(e);
-    return { message: "Ошибка." };
-  }
+async function setInactive(id) {
+  const xhr = await fetch(
+    '/api/Managers/disable/' + id, { method: 'GET' }
+  );
+  return xhr.json();
 }
 
-export default { setActive, setInactive, setManagerNum, testRestApi }
+// delete from final version
+async function testMethod() {
+  const xhr = await fetch(
+    '/api/Managers/test', { method: 'GET' }
+  );
+  return xhr.json();
+}
+
+export default { setActive, setInactive, setManagerNum, testMethod }

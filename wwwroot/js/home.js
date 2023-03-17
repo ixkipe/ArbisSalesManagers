@@ -62,9 +62,9 @@ function closeAllModals() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  document.querySelector('#testRest').onclick = () => {
-    const result = apiMethods.testRestApi();
-    console.log(result);
+  // delete from final version
+  document.querySelector('#testRest').onclick = async () => {
+    console.log((await apiMethods.testMethod()).result);
   };
 
   // Add a click event on buttons to open a specific modal
