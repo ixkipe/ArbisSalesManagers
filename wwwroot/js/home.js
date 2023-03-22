@@ -1,5 +1,6 @@
 import elements from "./elements.js";
-import apiMethods from "./api.js";
+import apiMethods from "./apiMethods.js";
+import search from "./search.js";
 
 const allManagersUrl = '/api/Managers?active=false';
 let managersHttpResponse;
@@ -64,7 +65,8 @@ function closeAllModals() {
 document.addEventListener('DOMContentLoaded', async () => {
   // delete from final version
   document.querySelector('#testRest').onclick = async () => {
-    console.log((await apiMethods.testMethod()).result);
+    // console.log((await apiMethods.testMethod()).result);
+    search('');
   };
 
   // Add a click event on buttons to open a specific modal

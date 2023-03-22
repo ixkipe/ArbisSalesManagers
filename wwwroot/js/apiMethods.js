@@ -7,7 +7,7 @@ async function setManagerNum(manager, alreadyExists) {
   let xhr;
   if (alreadyExists) {
     xhr = await fetch(
-      '/api/Managers/false',
+      '/api/Managers/',
       {
         method: 'PUT',
         headers: {
@@ -19,7 +19,7 @@ async function setManagerNum(manager, alreadyExists) {
   }
   else {
     xhr = await fetch(
-      '/api/Managers/true',
+      '/api/Managers/true/',
       {
         method: 'POST',
         headers: {
@@ -30,7 +30,7 @@ async function setManagerNum(manager, alreadyExists) {
     );
   }
   
-  return xhr.json();
+  return xhr;
 }
 
 /**
@@ -41,7 +41,7 @@ async function setActive(id) {
   const xhr = await fetch(
     '/api/Managers/enable/' + id, { method: 'GET' }
   );
-  return xhr.json();
+  return xhr;
 }
 
 /**
@@ -52,7 +52,7 @@ async function setInactive(id) {
   const xhr = await fetch(
     '/api/Managers/disable/' + id, { method: 'GET' }
   );
-  return xhr.json();
+  return xhr;
 }
 
 // delete from final version

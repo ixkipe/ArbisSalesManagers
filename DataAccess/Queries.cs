@@ -12,6 +12,7 @@ public class Queries {
   public const string MoveManagerToActive = $"insert into {MetaData.ManagersTable} select * from {MetaData.InactiveManagersTable} where id = @id";
   public const string RemoveManagerFromInactive = $"delete from {MetaData.InactiveManagersTable} where id = @id";
   public const string UpdateManagerNumber = $"update {MetaData.ManagersTable} set num = @num where id = @id";
+  public const string UpdateInactiveManagerNumber = $"update {MetaData.InactiveManagersTable} set num = @num where id = @id";
 
   // what follows applies to authentication
   public const string FetchCreds = $"select * from {MetaData.ApplicationCreds} where username = 'admin'";

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sTEydHgCNNRrM/LF/Ojgp+ZuhgO3P/WcOw9VnqCa280=",
+  "Hash": "uRuQQl/YosDvJBerGLkZAvXx9ZN6b3m3TRyIKhDBY7A=",
   "Source": "ArbisSalesManagers",
   "BasePath": "_content/ArbisSalesManagers",
   "Mode": "Default",
@@ -36516,12 +36516,12 @@
       "OriginalItemSpec": "wwwroot\\css\\fontawesome-free-6.3.0-web\\webfonts\\fa-v4compatibility.woff2"
     },
     {
-      "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\api.js",
+      "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\apiMethods.js",
       "SourceId": "ArbisSalesManagers",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\",
       "BasePath": "_content/ArbisSalesManagers",
-      "RelativePath": "js/api.js",
+      "RelativePath": "js/apiMethods.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -36530,7 +36530,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\api.js"
+      "OriginalItemSpec": "wwwroot\\js\\apiMethods.js"
     },
     {
       "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\elements.js",
@@ -36599,6 +36599,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\loginPage.js"
+    },
+    {
+      "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\search.js",
+      "SourceId": "ArbisSalesManagers",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\",
+      "BasePath": "_content/ArbisSalesManagers",
+      "RelativePath": "js/search.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\search.js"
     },
     {
       "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\site_logo.png",

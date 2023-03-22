@@ -1,12 +1,14 @@
+import api from "./apiMethods.js";
+
 function managerBlock(id, name, num, isActive, hasNumber) {
   let columnsContainer = document.createElement('div');
-  columnsContainer.className = 'box block';
+  columnsContainer.className = 'box block manager-block';
 
   let columns = document.createElement('div');
   columns.className = 'columns';
   columnsContainer.appendChild(columns);
 
-  columns.appendChild(nameColumn(name));
+  columns.appendChild(nameColumn(name, id));
   columns.appendChild(numColumn(num, id));
   columns.appendChild(switchComponent(isActive, id, hasNumber));
 
@@ -21,7 +23,7 @@ function labelElement(text) {
   return label;
 }
 
-function nameColumn(name) {
+function nameColumn(name, id) {
   let nameColumn = document.createElement('div');
   nameColumn.className = 'column is-half';
 
@@ -29,6 +31,7 @@ function nameColumn(name) {
 
   let nameParagraph = document.createElement('h4');
   nameParagraph.className = 'is-size-4';
+  nameParagraph.id = "name-" + id;
   nameParagraph.innerText = name;
   nameColumn.appendChild(nameParagraph);
 
@@ -42,58 +45,71 @@ function numColumn(num, id) {
   numColumn.appendChild(labelElement('Номер'));
 
   if (num === null) {
-    let numComponent = document.createElement('p');
-    numComponent.className = 'is-size-5';
-    numComponent.innerText = 'Не указан';
-    numColumn.appendChild(numComponent);
+    // button with "Задать номер" goes here
+    // let numComponent = document.createElement('p');
+    // numComponent.className = 'is-size-5';
+    // numComponent.innerText = 'Не указан';
+    // numColumn.appendChild(numComponent);
+
+    let setNumberButton = document.createElement('button');
+    setNumberButton.className = 'button is-small is-primary';
+    setNumberButton.innerText = 'Задать номер';
+    setNumberButton.onclick = () => {
+      numColumn.appendChild(numInputAddons('', id, true));
+      setNumberButton.remove();
+    };
+    numColumn.appendChild(setNumberButton);
+
     return numColumn;
   }
   
-  numColumn.appendChild(numComponentIfNumberExists(num, id));
+  numColumn.appendChild(numInputAddons(num, id, false));
   return numColumn;
 }
 
-function numComponentIfNumberExists(num, id) {
-  let numComponent = document.createElement('div');
-  numComponent.className = 'columns';
+/**
+ * 
+ * @param {string} num 
+ * @param {string} id 
+ * @param {boolean} isStatic 
+ * @returns 
+ */
+function numInputAddons(num, id, isStatic) {
+  let result = document.createElement('div');
+  result.className = 'field has-addons';
 
-  let numFieldContainer = halfColumn();
-  let buttonContainer = halfColumn();
-
-  let numFieldControl = document.createElement('div');
-  numFieldControl.className = 'control';
-  numFieldContainer.appendChild(numFieldControl);
+  let inputControl = document.createElement('div');
+  inputControl.className = 'control';
+  result.appendChild(inputControl);
 
   let numField = document.createElement('input');
   numField.className = 'input is-small';
+  if (!isStatic) {
+    numField.disabled = true;
+  }
   numField.id = 'inp-' + id;
-  numField.disabled = true;
   numField.type = 'text';
-  numField.value = num;
+  numField.value = isStatic ? '' : num;
   numField.oninput = () => {
     if (!validString(numField.value)) {
       document.getElementById(numField.id).classList.add('is-danger');
-      document.getElementById('btn-' + id).setAttribute('disabled', 'true');
+      document.getElementById('btn-' + id).classList.add('is-static');
     }
     else {
       document.getElementById(numField.id).classList.remove('is-danger');
-      document.getElementById('btn-' + id).removeAttribute('disabled');
+      document.getElementById('btn-' + id).classList.remove('is-static');
     }
   };
-  numFieldControl.appendChild(numField);
 
-  let button = numChangeButton(id);
-  buttonContainer.appendChild(button);
+  inputControl.appendChild(numField);
 
-  numComponent.appendChild(numFieldContainer);
-  numComponent.appendChild(buttonContainer);
-  return numComponent;
-}
+  let btnControl = document.createElement('div');
+  btnControl.className = 'control';
+  result.appendChild(btnControl);
 
-function halfColumn() {
-  let column = document.createElement('div');
-  column.className = 'column is-half';
-  return column;
+  btnControl.appendChild(isStatic ? numSubmitButton(id, true) : numChangeButton(id));
+
+  return result;
 }
 
 function switchComponent(isActive, id, hasNumber) {
@@ -105,6 +121,28 @@ function switchComponent(isActive, id, hasNumber) {
   
   let bulmaSwitch = document.createElement('input');
   bulmaSwitch.type = 'checkbox';
+  bulmaSwitch.onclick = () => {
+    bulmaSwitch.setAttribute('disabled', true);
+    
+    if (bulmaSwitch.hasAttribute('checked')) {
+      api.setInactive(id).then(response => {
+        console.log(response.status);
+        bulmaSwitch.removeAttribute('checked');
+      });
+    }
+    else {
+      api.setActive(id).then(response => {
+        console.log(response.status);
+        bulmaSwitch.setAttribute('checked', 'checked');
+      });
+    }
+
+    setTimeout(() => {
+      // active to inactive and vice versa
+
+      bulmaSwitch.removeAttribute('disabled');
+    }, 1000);
+  }
   bulmaSwitch.className = 'switch is-rounded';
   bulmaSwitch.id = 'swt-' + id;
   bulmaSwitch.name = bulmaSwitch.id;
@@ -142,7 +180,6 @@ function loadingIcon() {
 /**
  * 
  * @param {string} id 
- * @param {boolean} isSubmit 
  */
 function numChangeButton(id) {
   let button = document.createElement('button');
@@ -164,17 +201,45 @@ function numChangeButton(id) {
  */
 function numSubmitButton(id, createNew) {
   let button = document.createElement('button');
-  button.className = 'button is-small is-primary';
+  button.className = createNew ? 'button is-small is-static is-primary' : 'button is-small is-primary';
   button.innerText = 'Отправить';
   button.id = 'btn-' + id;
   button.onclick = () => {
+    if (createNew) {}
     document.getElementById('inp-' + id).setAttribute('disabled', 'true');
     button.classList.add('is-loading');
 
     // if (createNew) - insert new manager in inactive table; otherwise just modify the existing one
-    setTimeout(() => {
-      document.getElementById(button.id).replaceWith(numChangeButton(id));
-    }, 1000);
+    // setTimeout(() => {
+    //   document.getElementById(button.id).replaceWith(numChangeButton(id));
+    // }, 1000);
+    console.log(document.getElementById('name-' + id).innerText);
+
+    if (createNew) {
+      api.setManagerNum({
+        id: id,
+        username: document.getElementById('name-' + id).innerText,
+        num: document.getElementById('inp-' + id).value
+      }, false).then(response => {
+        console.log(response.status);
+        document.getElementById('swt-' + id).removeAttribute('disabled');
+        document.getElementById(button.id).replaceWith(numChangeButton(id));
+        // spawn toast that says "Number set successfully!"
+      })
+      .catch(e => console.log(e));
+    }
+    else {
+      api.setManagerNum({
+        id: id,
+        username: document.getElementById('name-' + id).innerText,
+        num: document.getElementById('inp-' + id).value
+      }, true).then(response => {
+        console.log(response.status);
+        document.getElementById(button.id).replaceWith(numChangeButton(id));
+        // spawn toast that says "Number changed successfully!"
+      })
+      .catch(e => console.log(e));
+    }
   }
   return button;
 }
@@ -184,7 +249,7 @@ function numSubmitButton(id, createNew) {
  * @param {string} str 
  */
 function validString(str) {
-  return str.trim() !== '';
+  return (str.trim() !== '') && (!isNaN(str));
 }
 
 /**

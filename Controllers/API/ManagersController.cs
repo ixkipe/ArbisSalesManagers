@@ -36,14 +36,24 @@ public class ManagersController : ControllerBase {
     var managersIds = string.Join(", ", managers.Select(x => x.Id));
 
     // active - those whose calls are to be logged
-    var activeManagers = await this._provider.Connection.QueryAsync<User>(
+    var activeManagers = (await this._provider.Connection.QueryAsync<User>(
       $"select * from {MetaData.ManagersTable} where id in ({managersIds})" // is this a vulnerability or what?!
-    );
+    ));
+    foreach (var manager in activeManagers) {
+      if (managers.Count(x => x.Id == manager.Id) > 0) {
+        manager.Username = managers.First(x => x.Id == manager.Id).Username;
+      }
+    }
 
     // inactive - their calls don't get logged, but they still own a number
     var inactiveManagers = await this._provider.Connection.QueryAsync<User>(
       $"select * from {MetaData.InactiveManagersTable} where id in ({managersIds})"
     );
+    foreach (var manager in inactiveManagers) {
+      if (managers.Count(x => x.Id == manager.Id) > 0) {
+        manager.Username = managers.First(x => x.Id == manager.Id).Username;
+      }
+    }
 
     // managers = unassigned, have no number and are inactive
     managers = managers.Except(activeManagers.Concat(inactiveManagers), new UserEqualityComparer());
@@ -76,6 +86,7 @@ public class ManagersController : ControllerBase {
 
   [HttpPost("{inactive:bool}")]
   public async Task<IActionResult> AssignPhoneNum([FromBody] User user, bool inactive = false) {
+    Log.Information(user.Username);
     await this._provider.Connection.ExecuteAsync(
       inactive ? Queries.CreateManagerInInactive : Queries.CreateManager,
       new {
@@ -130,7 +141,17 @@ public class ManagersController : ControllerBase {
       }
     );
 
-    return result > 0 ? Ok($"{user.Id} number changed to {user.Num}") : BadRequest("Something went wrong.");
+    if (result > 0) return Ok($"{user.Id} number changed to {user.Num} ACTIVE");
+
+    result = await this._provider.Connection.ExecuteAsync(
+      Queries.UpdateInactiveManagerNumber,
+      new {
+        num = user.Num,
+        id = user.Id
+      }
+    );
+
+    return result > 0 ? Ok($"{user.Id} number changed to {user.Num} INACTIVE") : BadRequest("Something went wrong.");
   }
 
   // no REST methods beyond this point
