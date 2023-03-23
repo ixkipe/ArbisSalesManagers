@@ -2,6 +2,7 @@ import elements from "./elements.js";
 import apiMethods from "./apiMethods.js";
 import search from "./search.js";
 import clearField from "./clearButton.js";
+import toast from "./toast.js";
 
 const allManagersUrl = '/api/Managers?active=false';
 let managersHttpResponse;
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // delete from final version
   document.querySelector('#testRest').onclick = async () => {
     // console.log((await apiMethods.testMethod()).result);
-    
+    // toast.numberSetToast('Лалка');
   };
 
   let searchBar = document.getElementById('searchInput');

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0cJa7nvijEk5BiQrLt+iDxV04cM7ma85OfEWbSID0iE=",
+  "Hash": "F0GUD/QQMANsIQOjHZsQqpV/tSLY+xe89X7sZy2X8k0=",
   "Source": "ArbisSalesManagers",
   "BasePath": "_content/ArbisSalesManagers",
   "Mode": "Default",
@@ -36618,6 +36618,23 @@
       "OriginalItemSpec": "wwwroot\\js\\loginPage.js"
     },
     {
+      "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\resetVisibility.js",
+      "SourceId": "ArbisSalesManagers",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\",
+      "BasePath": "_content/ArbisSalesManagers",
+      "RelativePath": "js/resetVisibility.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\resetVisibility.js"
+    },
+    {
       "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\search.js",
       "SourceId": "ArbisSalesManagers",
       "SourceType": "Discovered",
@@ -36633,6 +36650,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\search.js"
+    },
+    {
+      "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\toast.js",
+      "SourceId": "ArbisSalesManagers",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\",
+      "BasePath": "_content/ArbisSalesManagers",
+      "RelativePath": "js/toast.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\toast.js"
     },
     {
       "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\site_logo.png",

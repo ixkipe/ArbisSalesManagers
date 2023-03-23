@@ -1,4 +1,5 @@
 import api from "./apiMethods.js";
+import toast from "./toast.js";
 
 function managerBlock(id, name, num, isActive, hasNumber) {
   let columnsContainer = document.createElement('div');
@@ -128,12 +129,14 @@ function switchComponent(isActive, id, hasNumber) {
       api.setInactive(id).then(response => {
         console.log(response.status);
         bulmaSwitch.removeAttribute('checked');
+        toast.toggledSwitchToast(document.getElementById('name-' + id).innerText, false);
       });
     }
     else {
       api.setActive(id).then(response => {
         console.log(response.status);
         bulmaSwitch.setAttribute('checked', 'checked');
+        toast.toggledSwitchToast(document.querySelector('#name-' + id).innerText, true);
       });
     }
 
@@ -240,6 +243,8 @@ function numSubmitButton(id, createNew) {
       })
       .catch(e => console.log(e));
     }
+
+    toast.numberSetToast(document.querySelector('#name-' + id).innerText);
   }
   return button;
 }
