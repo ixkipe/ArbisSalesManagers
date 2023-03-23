@@ -1,8 +1,6 @@
 import elements from "./elements.js";
-import apiMethods from "./apiMethods.js";
 import search from "./search.js";
 import clearField from "./clearButton.js";
-import toast from "./toast.js";
 
 const allManagersUrl = '/api/Managers?active=false';
 let managersHttpResponse;
@@ -74,9 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   let searchBar = document.getElementById('searchInput');
-  searchBar.oninput = () => {
-    search(searchBar.value);
-  };
+  searchBar.oninput = () => search(searchBar.value);
   document.getElementById('clearSearch').onclick = clearField;
 
   // Add a click event on buttons to open a specific modal
