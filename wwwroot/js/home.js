@@ -1,6 +1,7 @@
 import elements from "./elements.js";
 import apiMethods from "./apiMethods.js";
 import search from "./search.js";
+import clearField from "./clearButton.js";
 
 const allManagersUrl = '/api/Managers?active=false';
 let managersHttpResponse;
@@ -33,6 +34,8 @@ function displayManagerList() {
   unassigned.forEach(manager => {
     mainContent.appendChild(elements.managerBlock(manager.id, manager.username, manager.num, false, false))
   });
+
+  document.querySelector('#searchBar').classList.remove('is-hidden');
 }
 
 function assignToGroups() {
@@ -66,8 +69,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   // delete from final version
   document.querySelector('#testRest').onclick = async () => {
     // console.log((await apiMethods.testMethod()).result);
-    search('');
+    
   };
+
+  let searchBar = document.getElementById('searchInput');
+  searchBar.oninput = () => {
+    search(searchBar.value);
+  };
+  document.getElementById('clearSearch').onclick = clearField;
 
   // Add a click event on buttons to open a specific modal
   (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {

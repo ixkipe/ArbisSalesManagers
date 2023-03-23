@@ -9,7 +9,20 @@
   </div>
 </section> *@
 
-<div class="container" id="mainContent"></div>
+<div class="container" id="mainContent">
+  <div class="columns is-desktop is-hidden" id="searchBar">
+    <div class="column is-3 is-offset-9">
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input type="text" class="input" id="searchInput" placeholder="Поиск по имени">
+        </div>
+        <div class="control is-hidden" id="searchDeleteButton">
+          <button class="button is-outlined is-danger" id="clearSearch"><span class="icon"><i class="fas fa-times"></i></span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal" id="instructionsModal">
   <div class="modal-background"></div>

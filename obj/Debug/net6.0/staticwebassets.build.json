@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uRuQQl/YosDvJBerGLkZAvXx9ZN6b3m3TRyIKhDBY7A=",
+  "Hash": "0cJa7nvijEk5BiQrLt+iDxV04cM7ma85OfEWbSID0iE=",
   "Source": "ArbisSalesManagers",
   "BasePath": "_content/ArbisSalesManagers",
   "Mode": "Default",
@@ -36531,6 +36531,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\apiMethods.js"
+    },
+    {
+      "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\clearButton.js",
+      "SourceId": "ArbisSalesManagers",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\",
+      "BasePath": "_content/ArbisSalesManagers",
+      "RelativePath": "js/clearButton.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\clearButton.js"
     },
     {
       "Identity": "C:\\Users\\kopylov.v\\Documents\\Projects\\dotnet\\ArbisSalesManagers\\wwwroot\\js\\elements.js",
