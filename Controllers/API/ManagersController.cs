@@ -170,8 +170,9 @@ public class ManagersController : ControllerBase {
       var response = await client.ExecuteGetAsync(request);
       Log.Information(response.StatusCode.ToString());
       if (response.StatusCode != System.Net.HttpStatusCode.OK) {
-        Log.Error("Access token is either invalid or has expired. Refreshing...");
+        Log.Warning("Access token is either invalid or has expired. Refreshing...");
         this._jwtHandler.Refresh();
+        Log.Information("Token refreshed.");
         client.Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken);
         response = await client.ExecuteGetAsync(request);
 

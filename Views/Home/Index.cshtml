@@ -11,7 +11,26 @@
 
 <div class="container" id="mainContent">
   <div class="columns is-desktop is-hidden" id="searchBar">
-    <div class="column is-3 is-offset-9">
+    <div class="column is-3">
+      <div class="dropdown" id="sortingDropdownContainer">
+        <div class="dropdown-trigger">
+          <button class="button dropdown-keep-open" aria-haspopup="true" aria-controls="sortingDropdown">
+            <span class="dropdown-keep-open">Сортировать</span>
+            <span class="icon is-small dropdown-keep-open">
+              <i class="fas fa-angle-down dropdown-keep-open" aria-hidden="true" ></i>
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="sortingDropdown" role="menu">
+          <div class="dropdown-content">
+            <a href="#" class="dropdown-item" id="sortingOptionName">по имени</a>
+            <a href="#" class="dropdown-item" id="sortingOptionNum">по номеру</a>
+            <a href="#" class="dropdown-item" id="sortingOptionActive">по активности</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column is-3 is-offset-6">
       <div class="field has-addons">
         <div class="control is-expanded">
           <input type="text" class="input" id="searchInput" placeholder="Поиск по имени">
@@ -28,13 +47,33 @@
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">Добавляем менеджера</p>
+      <p class="modal-card-title">Инструкция</p>
       <button class="delete" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
       <div class="content">
-        <h1 class="is-size-1">Lololol.</h1>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque enim ex ducimus nobis? Impedit aperiam, esse excepturi alias est corrupti magni rerum obcaecati et officia consequuntur cum sed ea hic debitis laudantium unde, omnis, quo mollitia eligendi culpa molestiae fugiat.</p>
+        <h3 class="is-size-3"><span class="icon ml-2 mr-4"><i class="fa-solid fa-phone"></i></span>Задаём номер</h3>
+        <figure>
+          <img src="~/content/1.jpg" alt="">
+          <img src="~/content/2.jpg" alt="">
+        </figure>
+        <ol>
+          <li>Нажимаем на кнопку <strong>Задать номер</strong>;</li>
+          <li>В появившемся поле набираем номер сотрудника и жмём кнопку <strong>Отправить</strong>.</li>
+        </ol>
+        <p>Впоследствии номер можно будет изменить:</p>
+        <figure>
+          <img src="~/content/3.jpg" alt="">
+        </figure>
+        <hr>
+        <h3 class="is-size-3"><span class="icon ml-2 mr-4"><i class="fa-solid fa-circle-check"></i></span>Активируем менеджера</h3>
+        <figure>
+          <img src="~/content/5.jpg" alt="">
+          <img src="~/content/4.jpg" alt="">
+          <figcaption>
+            Не забудем перевести "рычаг" в положение "Активен", чтобы звонки менеджера отображались в <strong>amoCRM</strong>.
+          </figcaption>
+        </figure>
       </div>
     </section>
     <footer class="modal-card-foot">
@@ -45,4 +84,5 @@
 
 @section Scripts {
   <script type="module" src="~/js/home.js"></script>
+  <script type="module" src="~/js/sorting.js"></script>
 }

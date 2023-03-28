@@ -65,12 +65,6 @@ function closeAllModals() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // delete from final version
-  document.querySelector('#testRest').onclick = async () => {
-    // console.log((await apiMethods.testMethod()).result);
-    // toast.numberSetToast('Лалка');
-  };
-
   let searchBar = document.getElementById('searchInput');
   searchBar.oninput = () => search(searchBar.value);
   document.getElementById('clearSearch').onclick = clearField;

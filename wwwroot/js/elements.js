@@ -4,6 +4,7 @@ import toast from "./toast.js";
 function managerBlock(id, name, num, isActive, hasNumber) {
   let columnsContainer = document.createElement('div');
   columnsContainer.className = 'box block manager-block';
+  columnsContainer.id = 'blk-' + id;
 
   let columns = document.createElement('div');
   columns.className = 'columns';
@@ -31,7 +32,7 @@ function nameColumn(name, id) {
   nameColumn.appendChild(labelElement('Имя'));
 
   let nameParagraph = document.createElement('h4');
-  nameParagraph.className = 'is-size-4';
+  nameParagraph.className = 'is-size-4 name-paragraph';
   nameParagraph.id = "name-" + id;
   nameParagraph.innerText = name;
   nameColumn.appendChild(nameParagraph);
@@ -84,7 +85,7 @@ function numInputAddons(num, id, isStatic) {
   result.appendChild(inputControl);
 
   let numField = document.createElement('input');
-  numField.className = 'input is-small';
+  numField.className = 'input is-small num-input-field';
   if (!isStatic) {
     numField.disabled = true;
   }
@@ -254,7 +255,7 @@ function numSubmitButton(id, createNew) {
  * @param {string} str 
  */
 function validString(str) {
-  return (str.trim() !== '') && (!isNaN(str));
+  return (str.indexOf(' ') === -1) && (!isNaN(str));
 }
 
 /**

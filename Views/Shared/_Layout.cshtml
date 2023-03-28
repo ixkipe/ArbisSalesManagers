@@ -11,6 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="~/css/bulma.min.css">
   <link rel="stylesheet" href="~/css/bulma-switch-2.0.4/dist/css/bulma-switch.min.css">
+  <link rel="stylesheet" href="~/css/default.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +44,7 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <button class="button is-warning is-light" id="testRest">Test</button> @* delete this button from final version *@
+            @* <button class="button is-warning is-light" id="testRest">Test</button> delete this button from final version *@
             @if (loggedIn) {
               <button class="button is-info is-light js-modal-trigger" id="instructions" data-target="instructionsModal">&#129300; А как добавлять?</button>
               <a class="button is-danger is-outlined" href='@Url.Action(action: "Index", controller: "Logout")'>
