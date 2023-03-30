@@ -1,11 +1,7 @@
-Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
-                .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
-                .WriteTo.File("applog.log")
-                .WriteTo.Console()
-                .CreateLogger();
-
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IDbConnectionProvider, DbConnectionProvider>();
@@ -25,6 +21,10 @@ builder.Services.AddAuthorization(opt => {
 builder.Host.UseSerilog();
 
 var app = builder.Build();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions() {
+  ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+});
 
 if (app.Environment.IsDevelopment()) {
   app.UseHttpsRedirection();
