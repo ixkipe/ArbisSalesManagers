@@ -1,3 +1,4 @@
+using AmoAsterisk.DbAccess;
 using ArbisSalesManagers.AmoCrmApiRequests;
 using ArbisSalesManagers.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
+using MetaData = ArbisSalesManagers.DataAccess.MetaData;
 
 namespace ArbisSalesManagers.Controllers;
 
@@ -12,13 +14,15 @@ namespace ArbisSalesManagers.Controllers;
 [Route("api/[controller]")]
 [Authorize(Policy = "RegularUser")]
 public class ManagersController : ControllerBase {
-  private readonly IDbConnectionProvider _provider;
+  private readonly IMysqlMiscConnectionProvider _provider;
   private readonly IMapper _mapper;
   private readonly IConfiguration _configuration;
   private readonly IJwtHandler _jwtHandler;
+  private readonly IServiceProvider _serviceProvider;
 
-  public ManagersController(IDbConnectionProvider provider, IMapper mapper, IConfiguration configuration, IJwtHandler jwtHandler)
+  public ManagersController(IMysqlMiscConnectionProvider provider, IMapper mapper, IConfiguration configuration, IJwtHandler jwtHandler, IServiceProvider serviceProvider)
   {
+    this._serviceProvider = serviceProvider;
     _provider = provider;
     _mapper = mapper;
     _configuration = configuration;
@@ -141,7 +145,9 @@ public class ManagersController : ControllerBase {
       }
     );
 
-    if (result > 0) return Ok($"{user.Id} number changed to {user.Num} ACTIVE");
+    if (result > 0) {
+      return Ok($"{user.Id} number changed to {user.Num} ACTIVE");
+    } 
 
     result = await this._provider.Connection.ExecuteAsync(
       Queries.UpdateInactiveManagerNumber,
@@ -150,7 +156,6 @@ public class ManagersController : ControllerBase {
         id = user.Id
       }
     );
-
     return result > 0 ? Ok($"{user.Id} number changed to {user.Num} INACTIVE") : BadRequest("Something went wrong.");
   }
 
@@ -158,29 +163,38 @@ public class ManagersController : ControllerBase {
   #region notRest
   private async Task<IEnumerable<User>> AmoManagerList() {
     IEnumerable<User> managers = Enumerable.Empty<User>();
+    bool IFUCKINGHATERESTSHARP = false;
 
-    using (var client = new RestClient(new RestClientOptions() {
+    using var client = new RestClient(new RestClientOptions() {
       ThrowOnAnyError = false,
-      BaseUrl = new Uri(this._configuration.GetSection("AppConfig").GetSection("AmoCrmBaseUrl").Value)
-    })) 
-    {
-      client.Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken);
-      var request = new RestRequest(Requests.GetAllManagers);
+      BaseUrl = new Uri(this._configuration.GetSection("AppConfig").GetSection("AmoCrmBaseUrl").Value),
+      Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken)
+    });
 
-      var response = await client.ExecuteGetAsync(request);
-      Log.Information(response.StatusCode.ToString());
-      if (response.StatusCode != System.Net.HttpStatusCode.OK) {
-        Log.Warning("Access token is either invalid or has expired. Refreshing...");
-        this._jwtHandler.Refresh();
-        Log.Information("Token refreshed.");
-        client.Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken);
-        response = await client.ExecuteGetAsync(request);
+    var request = new RestRequest(Requests.GetAllManagers);
 
-        if (response.StatusCode != System.Net.HttpStatusCode.OK) throw new HttpRequestException($"Either the refresh token has expired or something else has gone wrong: {response.ErrorException?.ToString()}");
-      };
-    
-      managers = JsonConvert.DeserializeObject<ListResult>(response.Content)._embedded.Users.Select(u => _mapper.Map<User>(u));
+    var response = await client.ExecuteGetAsync(request);
+    Log.Information(response.StatusCode.ToString());
+    if (response.StatusCode != System.Net.HttpStatusCode.OK) {
+      Log.Warning("Access token is either invalid or has expired. Refreshing...");
+      this._jwtHandler.Refresh();
+      Log.Information("Token refreshed.");
+      IFUCKINGHATERESTSHARP = true;
+    };
+
+    if (IFUCKINGHATERESTSHARP) {
+      client.Dispose();
+
+      using var newClientBecauseWhyNotRightRestSharpDevsYouFuckingDimwits = new RestClient(new RestClientOptions() {
+        ThrowOnAnyError = false,
+        BaseUrl = new Uri(this._configuration.GetSection("AppConfig").GetSection("AmoCrmBaseUrl").Value),
+        Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken)
+      });
+
+      response = await newClientBecauseWhyNotRightRestSharpDevsYouFuckingDimwits.ExecuteGetAsync(request);
     }
+    
+    managers = JsonConvert.DeserializeObject<ListResult>(response.Content)._embedded.Users.Select(u => _mapper.Map<User>(u));
 
     return managers;
   }

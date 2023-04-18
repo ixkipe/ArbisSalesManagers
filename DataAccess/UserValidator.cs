@@ -1,12 +1,13 @@
 using System.Security.Cryptography;
+using AmoAsterisk.DbAccess;
 using ArbisSalesManagers.Models;
 
 namespace ArbisSalesManagers.DataAccess;
 
 public class UserValidator : IUserValidator {
-  private readonly IDbConnectionProvider _provider;
+  private readonly IMysqlMiscConnectionProvider _provider;
 
-  public UserValidator(IDbConnectionProvider provider)
+  public UserValidator(IMysqlMiscConnectionProvider provider)
   {
     _provider = provider;
   }

@@ -1,6 +1,9 @@
 appsettings.Development.json
 appsettings.json
 *.log
+hangfire.db
+keys/
+bin/
 
 .vscode/*
 !.vscode/settings.json

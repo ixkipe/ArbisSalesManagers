@@ -1,13 +1,14 @@
 using RestSharp;
 using Newtonsoft.Json;
+using AmoAsterisk.DbAccess;
 
 namespace ArbisSalesManagers.AmoCrmApiRequests;
 
 public class JwtHandler : IJwtHandler {
-  private readonly IDbConnectionProvider _provider;
+  private readonly IMysqlMiscConnectionProvider _provider;
   private readonly IConfiguration _config;
 
-  public JwtHandler(IDbConnectionProvider provider, IConfiguration config)
+  public JwtHandler(IMysqlMiscConnectionProvider provider, IConfiguration config)
   {
     _provider = provider;
     _config = config;

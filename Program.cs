@@ -1,13 +1,34 @@
+using AmoAsterisk;
+using AmoAsterisk.ApiManagement;
+using AmoAsterisk.DbAccess;
+using ArbisSalesManagers;
+using Hangfire;
+using Hangfire.Storage.SQLite;
+using Microsoft.AspNetCore.DataProtection;
+
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+Log.Logger = new LoggerConfiguration()
+  .ReadFrom.Configuration(builder.Configuration)
+  .CreateLogger();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddHangfire(c => {
+  c.UseRecommendedSerializerSettings()
+  .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+  .UseSimpleAssemblyNameTypeSerializer()
+  .UseSQLiteStorage(builder.Configuration.GetConnectionString("HangfireSqlite"));
+});
+builder.Services.AddHangfireServer();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddSingleton<IDbConnectionProvider, DbConnectionProvider>();
+builder.Services.AddSingleton<IMysqlMiscConnectionProvider>(implementationInstance: new MysqlMiscConnectionProvider(builder.Configuration));
 builder.Services.AddScoped<ArbisSalesManagers.AmoCrmApiRequests.IJwtHandler, ArbisSalesManagers.AmoCrmApiRequests.JwtHandler>();
+builder.Services.AddSingleton<IDbConnectionProvider>(implementationInstance: new DefaultDbConnectionProvider(builder.Configuration));
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<AmoManagerList>(implementationInstance: new AmoManagerList(builder.Configuration));
+// builder.Services.AddScoped<AmoCrmApiManager>(implementationFactory: (svc) => new AmoCrmApiManager(builder.Configuration, svc));
+builder.Services.AddDataProtection().PersistKeysToFileSystem(directory: new DirectoryInfo("keys"));
 builder.Services.AddAuthentication(defaultScheme: "AmoAsteriskAuthCookie").AddCookie("AmoAsteriskAuthCookie", opt => {
   opt.Cookie.Name = "AmoAsteriskAuthCookie";
   opt.ExpireTimeSpan = TimeSpan.FromDays(30d);
@@ -43,6 +64,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
+app.MapHangfireDashboard();
+app.UseHangfireDashboard();
 
 app.UseSerilogRequestLogging(opt => {
   opt.MessageTemplate = "{RemoteIpAddress} {RequestScheme} {RequestHost} {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
@@ -52,5 +75,13 @@ app.UseSerilogRequestLogging(opt => {
     diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
   };
 });
+
+if (app.Environment.IsProduction()) {
+}
+  RecurringJob.AddOrUpdate<AmoCrmApiManager>(
+    recurringJobId: "add-calls",
+    methodCall: apiManager => apiManager.AddCallsContinuously(false),
+    cronExpression: Cron.Minutely
+  );
 
 app.Run();

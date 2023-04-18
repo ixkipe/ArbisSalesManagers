@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let modelValidation = document.getElementById('model-validation');
   let usernameValidation = document.getElementById('username-validation');
   let passwordValidation = document.getElementById('password-validation');
+  let showPasswordIcon = document.querySelector('#showPasswordIcon');
   const validInputs = [false, false];
 
   function toggleButton() {
@@ -64,4 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
     passwordValidation.innerHTML = '';
     passwordField.classList.remove('is-danger');
   }
+
+  showPasswordIcon.addEventListener('click', () => {
+    if (showPasswordIcon.querySelector('i').classList.contains('fa-eye')) {
+      passwordField.type = 'text';
+      passwordField.focus();
+      showPasswordIcon.querySelector('i').classList.replace('fa-eye', 'fa-eye-slash');
+      return;
+    }
+    else {
+      passwordField.type = 'password';
+      passwordField.focus();
+      showPasswordIcon.querySelector('i').classList.replace('fa-eye-slash', 'fa-eye');
+    }
+
+  })
 });

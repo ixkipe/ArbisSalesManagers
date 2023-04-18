@@ -3,14 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using AmoAsterisk.DbAccess;
 
 namespace ArbisSalesManagers.Controllers;
 
 [AllowAnonymous]
 public class LoginController : Controller {
-  private readonly IDbConnectionProvider _provider;
+  private readonly IMysqlMiscConnectionProvider _provider;
 
-  public LoginController(IDbConnectionProvider provider)
+  public LoginController(IMysqlMiscConnectionProvider provider)
   {
     _provider = provider;
   }

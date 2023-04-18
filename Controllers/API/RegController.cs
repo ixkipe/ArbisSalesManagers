@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using System.Security.Cryptography;
+using AmoAsterisk.DbAccess;
 using ArbisSalesManagers.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("api/[controller]")]
 public class RegController : ControllerBase {
-  private readonly IDbConnectionProvider _provider;
+  private readonly IMysqlMiscConnectionProvider _provider;
 
-  public RegController(IDbConnectionProvider provider)
+  public RegController(IMysqlMiscConnectionProvider provider)
   {
     _provider = provider;
   }

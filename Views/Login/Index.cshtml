@@ -21,10 +21,13 @@
 
         <div class="field">
           <label asp-for="@Model.Password" class="label"></label>
-          <div class="control has-icons-left">
+          <div class="control has-icons-left has-icons-right">
             <input type="password" id="password-field" class="input" asp-for="@Model.Password">
             <span class="icon is-small is-left">
               <i class="fas fa-key"></i>
+            </span>
+            <span class="icon is-small is-right is-clickable" id="showPasswordIcon">
+              <i class="fa-solid fa-eye"></i>
             </span>
           </div>
           <span class="help is-danger" asp-validation-for="@Model.Password" id="password-validation"></span>

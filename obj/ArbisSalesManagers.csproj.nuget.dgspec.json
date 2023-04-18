@@ -50,6 +50,30 @@
               "target": "Package",
               "version": "[2.0.123, )"
             },
+            "HangFire.AspNetCore": {
+              "target": "Package",
+              "version": "[1.7.34, )"
+            },
+            "HangFire.MemoryStorage": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.7.34, )"
+            },
+            "Hangfire.Storage.SQlite": {
+              "target": "Package",
+              "version": "[0.3.3, )"
+            },
+            "Microsoft.AspNet.WebApi.Client": {
+              "target": "Package",
+              "version": "[5.2.9, )"
+            },
+            "Microsoft.Data.Sqlite": {
+              "target": "Package",
+              "version": "[7.0.5, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.32, )"
@@ -58,9 +82,13 @@
               "target": "Package",
               "version": "[13.0.2, )"
             },
+            "Quartz.AspNetCore": {
+              "target": "Package",
+              "version": "[3.6.2, )"
+            },
             "RestSharp": {
               "target": "Package",
-              "version": "[108.0.3, )"
+              "version": "[110.2.0, )"
             },
             "Serilog": {
               "target": "Package",
@@ -97,6 +125,11 @@
             "Serilog.Sinks.Seq": {
               "target": "Package",
               "version": "[5.2.2, )"
+            },
+            "System.Runtime.InteropServices": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using System.Security.Cryptography;
+using AmoAsterisk.DbAccess;
 using ArbisSalesManagers.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -9,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 [AllowAnonymous]
 public class SignInController : ControllerBase {
-  private readonly IDbConnectionProvider _provider;
+  private readonly IMysqlMiscConnectionProvider _provider;
 
-  public SignInController(IDbConnectionProvider provider)
+  public SignInController(IMysqlMiscConnectionProvider provider)
   {
     _provider = provider;
   }
