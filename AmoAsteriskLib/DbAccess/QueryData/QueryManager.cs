@@ -15,7 +15,7 @@ public class QueryManager {
       ArbisSalesManagers.DataAccess.Queries.GetAllManagers
     );
 
-    return $"select * from {MetaData.DatabaseName} where (disposition = {MetaData.CallsLineBusy} or disposition = {MetaData.CallsNoAnswer}) and src in ({managers.JoinNumbers()}) and length(dst) > 5 and addtime > @from order by addtime desc";
+    return $"select * from {MetaData.DatabaseName} where (disposition = {MetaData.CallAnswered} and billsec >= {MetaData.DurationSecondsMin}) and src in ({managers.JoinNumbers()}) and length(dst) > 5 and addtime > @from order by addtime desc";
   }
 
   public string GetUnansweredCallsAfterCertainDate() {

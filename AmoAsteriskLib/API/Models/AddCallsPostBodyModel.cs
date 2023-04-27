@@ -7,7 +7,7 @@ public class AddCallsPostBodyModel {
 
 public abstract class BareCallModel {
   public string phone_number { get; set; }
-  public string source { get; set; } = "AmoAsterisk.NET";
+  public string source { get; set; } = "test_asterisk";
   public long created_at { get; set; }
   public string created_by { get; set; }
   public int call_status { get; set; } = 4;

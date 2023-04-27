@@ -34,13 +34,13 @@ public class CallFetcher {
 
     if (calls.Count() > 0) {
       foreach (var call in calls) {
-        Log.Information($"{call.Calldate.ToString(format: "dd MMMM yyyy HH:mm:ss")} {call.Src} звонил(а) {call.Dst}. Длительность: {new TimeSpan(0, 0, call.BillSec).ToString("mm':'ss")}.");
+        Log.Information($"{call.AddTime.ToString(format: "dd MMMM yyyy HH:mm:ss")} {call.Src} звонил(а) {call.Dst}. Длительность: {new TimeSpan(0, 0, call.BillSec).ToString("mm':'ss")}.");
       }
     }
 
     if (unansweredCalls.Count() > 0) {
       foreach (var call in unansweredCalls) {
-        Log.Information($"{call.Calldate.ToString(format: "dd MMMM yyyy HH:mm:ss")} {call.Src} звонил(а) {call.Dst}. Нет ответа.");
+        Log.Information($"{call.AddTime.ToString(format: "dd MMMM yyyy HH:mm:ss")} {call.Src} звонил(а) {call.Dst}. Нет ответа.");
       }
     }
 
@@ -56,16 +56,28 @@ public class CallFetcher {
       var calls = await GetCallsAfterCertainDate(time);
 
       if (calls is not null) {
-        time = calls.First().AddTime;
-        await this._services.GetService<IMysqlMiscConnectionProvider>().Connection.ExecuteAsync(
-          QueryManager.UpdateLastCallTime,
-          new {
-            dateTime = time
-          }
-        );
+        // time = calls.First().AddTime;
+        // await this._services.GetService<IMysqlMiscConnectionProvider>().Connection.ExecuteAsync(
+        //   QueryManager.UpdateLastCallTime,
+        //   new {
+        //     dateTime = time
+        //   }
+        // );
         return calls;
       }
 
       return null;
+  }
+
+  public async static Task UpdateReferenceTime(IEnumerable<FinishedCallModel>? calls, IServiceProvider services) {
+    if (calls is null) return;
+
+    var time = calls.First().AddTime;
+    await services.GetService<IMysqlMiscConnectionProvider>().Connection.ExecuteAsync(
+      QueryManager.UpdateLastCallTime,
+      new {
+        dateTime = time
+      }
+    );
   }
 }

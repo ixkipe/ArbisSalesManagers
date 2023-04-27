@@ -22,7 +22,6 @@ builder.Services.AddHangfire(c => {
 builder.Services.AddHangfireServer();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IMysqlMiscConnectionProvider>(implementationInstance: new MysqlMiscConnectionProvider(builder.Configuration));
-builder.Services.AddScoped<ArbisSalesManagers.AmoCrmApiRequests.IJwtHandler, ArbisSalesManagers.AmoCrmApiRequests.JwtHandler>();
 builder.Services.AddSingleton<IDbConnectionProvider>(implementationInstance: new DefaultDbConnectionProvider(builder.Configuration));
 builder.Services.AddScoped<IUserValidator, UserValidator>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -63,9 +62,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute();
 app.MapHangfireDashboard();
-app.UseHangfireDashboard();
+app.UseHangfireDashboard(options: new DashboardOptions(){
+  Authorization = new[] { new HangfireAuthorizationFilter() }
+});
+app.MapDefaultControllerRoute();
 
 app.UseSerilogRequestLogging(opt => {
   opt.MessageTemplate = "{RemoteIpAddress} {RequestScheme} {RequestHost} {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";

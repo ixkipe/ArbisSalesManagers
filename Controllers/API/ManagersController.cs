@@ -1,3 +1,4 @@
+using AmoAsterisk.ApiManagement;
 using AmoAsterisk.DbAccess;
 using ArbisSalesManagers.AmoCrmApiRequests;
 using ArbisSalesManagers.Models;
@@ -17,16 +18,14 @@ public class ManagersController : ControllerBase {
   private readonly IMysqlMiscConnectionProvider _provider;
   private readonly IMapper _mapper;
   private readonly IConfiguration _configuration;
-  private readonly IJwtHandler _jwtHandler;
   private readonly IServiceProvider _serviceProvider;
 
-  public ManagersController(IMysqlMiscConnectionProvider provider, IMapper mapper, IConfiguration configuration, IJwtHandler jwtHandler, IServiceProvider serviceProvider)
+  public ManagersController(IMysqlMiscConnectionProvider provider, IMapper mapper, IConfiguration configuration, IServiceProvider serviceProvider)
   {
     this._serviceProvider = serviceProvider;
     _provider = provider;
     _mapper = mapper;
     _configuration = configuration;
-    _jwtHandler = jwtHandler;
   }
 
   // delete this from final version
@@ -164,11 +163,12 @@ public class ManagersController : ControllerBase {
   private async Task<IEnumerable<User>> AmoManagerList() {
     IEnumerable<User> managers = Enumerable.Empty<User>();
     bool IFUCKINGHATERESTSHARP = false;
+    var session = new AmoCrmSession(string.Empty, this._configuration, this._provider);
 
     using var client = new RestClient(new RestClientOptions() {
       ThrowOnAnyError = false,
       BaseUrl = new Uri(this._configuration.GetSection("AppConfig").GetSection("AmoCrmBaseUrl").Value),
-      Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken)
+      Authenticator = new JwtAuthenticator(session.AccessToken)
     });
 
     var request = new RestRequest(Requests.GetAllManagers);
@@ -177,7 +177,7 @@ public class ManagersController : ControllerBase {
     Log.Information(response.StatusCode.ToString());
     if (response.StatusCode != System.Net.HttpStatusCode.OK) {
       Log.Warning("Access token is either invalid or has expired. Refreshing...");
-      this._jwtHandler.Refresh();
+      session.RefreshCreds();
       Log.Information("Token refreshed.");
       IFUCKINGHATERESTSHARP = true;
     };
@@ -188,7 +188,7 @@ public class ManagersController : ControllerBase {
       using var newClientBecauseWhyNotRightRestSharpDevsYouFuckingDimwits = new RestClient(new RestClientOptions() {
         ThrowOnAnyError = false,
         BaseUrl = new Uri(this._configuration.GetSection("AppConfig").GetSection("AmoCrmBaseUrl").Value),
-        Authenticator = new JwtAuthenticator(this._jwtHandler.AccessToken)
+        Authenticator = new JwtAuthenticator(session.AccessToken)
       });
 
       response = await newClientBecauseWhyNotRightRestSharpDevsYouFuckingDimwits.ExecuteGetAsync(request);

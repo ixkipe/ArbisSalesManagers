@@ -2,7 +2,6 @@ using AmoAsterisk.DbAccess;
 using AmoAsterisk;
 using Newtonsoft.Json;
 using AmoAsterisk.DbAccess.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AmoAsterisk.ApiManagement;
 
@@ -14,16 +13,16 @@ public class AddCallsPostBodyMaker {
     _services = services;
   }
 
-  public async Task<string?> FormJsonRequestBody(DateTime? since = null) {
+  public async Task<KeyValuePair<string?, IEnumerable<FinishedCallModel>?>> FormJsonRequestBody(DateTime? since = null) {
     var callFetcher = new CallFetcher(this._services);
     var calls = since is null? await callFetcher.GetCallsUpdateTime() : await callFetcher.GetCallsAfterCertainDate((DateTime)since);
 
-    if (calls is null) return null;
+    if (calls is null) return new KeyValuePair<string?, IEnumerable<FinishedCallModel>?>(null, null);
 
     AddCallsPostBodyModel body = CreateBodyBase(calls);
 
     var request = JsonConvert.SerializeObject(body);
-    return request;
+    return new KeyValuePair<string?, IEnumerable<FinishedCallModel>?>(request, calls);
   }
 
   private AddCallsPostBodyModel CreateBodyBase(IEnumerable<FinishedCallModel> calls) {

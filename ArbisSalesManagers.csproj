@@ -33,10 +33,4 @@
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" PrivateAssets="all" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="AmoAsterisk">
-      <HintPath>./packages/AmoAsteriskLib.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

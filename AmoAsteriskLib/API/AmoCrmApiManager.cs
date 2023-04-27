@@ -30,15 +30,15 @@ public class AmoCrmApiManager {
     AddCallsPostBodyMaker bodyMaker = new(this._services);
     var body = await bodyMaker.FormJsonRequestBody(from);
     
-    if (body is null) {
+    if (body.Key is null) {
       Log.Information("No calls found; thus, none added.");
       return;
     }
 
-    await PostCalls(body);
+    await PostCalls(body.Key);
   }
 
-  private async Task PostCalls(string jsonBody) {
+  private async Task<bool> PostCalls(string jsonBody) {
     using (var client = new HttpClient()) {
       client.BaseAddress = new Uri(new RequestManager(this._config).Post_MultipleCalls);
       client.DefaultRequestHeaders.Accept.Add(
@@ -51,7 +51,7 @@ public class AmoCrmApiManager {
       var response = await client.PostAsync(string.Empty, new StringContent(jsonBody, System.Text.Encoding.UTF8, "application/json"));
       if (response.IsSuccessStatusCode) {
         Log.Information("Okay (token still valid). Calls added.");
-        return;
+        return true;
       }
     }
 
@@ -71,10 +71,11 @@ public class AmoCrmApiManager {
       if (newResponse.IsSuccessStatusCode) {
         Log.Warning("Token has been refreshed.");
         Log.Information("Calls added.");
-        return;
+        return true;
       }
 
       Log.Error("No valid token found; awaiting authorization code.");
+      return false;
     }
   }
 
@@ -88,11 +89,13 @@ public class AmoCrmApiManager {
     }
 
     var body = await new AddCallsPostBodyMaker(this._services).FormJsonRequestBody();
-    if (body is null) {
+    if (body.Key is null) {
       Log.Information("No calls found; thus, none added.");
       return;
     }
+    Log.Information(body.Key);
     
-    await PostCalls(body);
+    var success = await PostCalls(body.Key);
+    if (success) await CallFetcher.UpdateReferenceTime(body.Value, this._services);
   }
 }
